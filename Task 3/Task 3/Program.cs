@@ -130,14 +130,16 @@ public class Task_3 {
         // dimensions not matching
         if (widthA != B.GetLength(1) || heightA != B.GetLength(0)) throw new Exception("Matrix dimensions not matching.");
 
+        double[,] addedMatrix = new double[widthA, heightA];
+
         // addition of B cells to A cells (in situ)
         for (int i = 0; i < heightA; i++){
             for (int j = 0; j < widthA; j++){
-                A[i, j] = (A[i, j] + B[i,j]);
+                addedMatrix[i, j] = (A[i, j] + B[i,j]);
             }
         }
 
-        return A;
+        return addedMatrix;
     }
 
     /*
