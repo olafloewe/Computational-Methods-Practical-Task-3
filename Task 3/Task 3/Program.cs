@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Task_3
-{
+public class Task_3{
     /*
     double[,] MatrixPad(double[,] A, int m, int n)
         Input:
@@ -20,8 +19,7 @@ public class Task_3
             MatrixPad({{1, 2, 3},{4, 5, 6}}, 2, 2)
                     -> Error/Exception (A destination size is smaller than input size)
     */
-    private static double[,] MatrixPad(double[,] A, int m, int n)
-    {
+    private static double[,] MatrixPad(double[,] A, int m, int n){
 
         int width = A.GetLength(1);
         int height = A.GetLength(0);
@@ -36,10 +34,8 @@ public class Task_3
         double[,] paddedMatrix = new double[m, n];
 
         // conditioned copy of matrix
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
                 paddedMatrix[i, j] = (j < width && i < height) ? A[i, j] : 0;
             }
         }
@@ -61,8 +57,7 @@ public class Task_3
             MatrixCrop({{1, 2, 3},{4, 5, 6}}, 3, 3)
                     -> Error/Exception (A destination size is larger than input size)
     */
-    private static double[,] MatrixCrop(double[,] A, int m, int n, int offsetM = 0, int offsetN = 0)
-    {
+    private static double[,] MatrixCrop(double[,] A, int m, int n, int offsetM = 0, int offsetN = 0){
         int width = A.GetLength(1);
         int height = A.GetLength(0);
 
@@ -79,10 +74,8 @@ public class Task_3
         double[,] croppedMatrix = new double[m, n];
 
         // conditioned copy of matrix
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
                 croppedMatrix[i, j] = A[i + offsetM, j + offsetN];
             }
         }
@@ -102,8 +95,7 @@ public class Task_3
             MatrixScale({{1, 2, 3}, {4, 5, 6}}, 2)
                     -> {{2, 4, 6}, {8, 10, 12}}
     */
-    private static double[,] MatrixScale(double[,] A, double x)
-    {
+    private static double[,] MatrixScale(double[,] A, double x){
         int width = A.GetLength(1);
         int height = A.GetLength(0);
 
@@ -113,10 +105,8 @@ public class Task_3
         double[,] scaledMatrix = new double[height, width];
 
         // multiplication of every cell
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
                 scaledMatrix[i, j] = (A[i, j] * x);
             }
         }
@@ -136,8 +126,7 @@ public class Task_3
             MatrixAdd({{1, 2, 3},{4, 5, 6}}, {{7, 8}, {9, 10}, {11, 12}})
                     -> Error/Exception (Dimension mismatch)
     */
-    private static double[,] MatrixAdd(double[,] A, double[,] B)
-    {
+    private static double[,] MatrixAdd(double[,] A, double[,] B){
         int widthA = A.GetLength(1);
         int heightA = A.GetLength(0);
 
@@ -147,10 +136,8 @@ public class Task_3
         double[,] addedMatrix = new double[heightA, widthA];
 
         // addition of B cells to A cells (in situ)
-        for (int i = 0; i < heightA; i++)
-        {
-            for (int j = 0; j < widthA; j++)
-            {
+        for (int i = 0; i < heightA; i++){
+            for (int j = 0; j < widthA; j++){
                 addedMatrix[i, j] = (A[i, j] + B[i, j]);
             }
         }
@@ -158,8 +145,7 @@ public class Task_3
         return addedMatrix;
     }
 
-    private static double[,] MatrixSplice(double[,] A, double[,] B, bool leftToRight = true)
-    {
+    private static double[,] MatrixSplice(double[,] A, double[,] B, bool leftToRight = true){
         int widthA = A.GetLength(1);
         int heightA = A.GetLength(0);
         int widthB = B.GetLength(1);
@@ -171,10 +157,8 @@ public class Task_3
         double[,] splicedMatrix = (leftToRight) ? new double[heightA, widthA + widthB] : new double[heightA + heightB, widthA];
 
         // addition of B cells to A cells (in situ)
-        for (int i = 0; i < splicedMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < splicedMatrix.GetLength(1); j++)
-            {
+        for (int i = 0; i < splicedMatrix.GetLength(0); i++){
+            for (int j = 0; j < splicedMatrix.GetLength(1); j++){
                 if (i < heightA && j < widthA) splicedMatrix[i, j] = A[i, j]; // still in A
                 if (leftToRight && j >= widthA && i < heightB) splicedMatrix[i, j] = B[i, j - widthA]; // in B to the right
                 if (!leftToRight && i >= heightA && j < widthB) splicedMatrix[i, j] = B[i - heightA, j]; // in B below
@@ -196,27 +180,27 @@ public class Task_3
             MatrixMultiply({{1, 2, 3},{4, 5, 6}}, {{7, 8, 9}, {10, 11, 12}})
                     -> Error/Exception (Dimension mismatch)
     */
-    private static double[,] MatrixMultiply(double[,] A, double[,] B)
-    {
+    private static double[,] MatrixMultiply(double[,] A, double[,] B){
 
         int widthA = A.GetLength(1);
         int heightA = A.GetLength(0);
         int widthB = B.GetLength(1);
         int heightB = B.GetLength(0);
 
+        /*
         Console.WriteLine($"A: {heightA}x{widthA}");
         Console.WriteLine($"B: {heightB}x{widthB}");
+        */
 
         // dimensions not matching
         if (widthA != heightB) throw new Exception("Matrix dimensions not matching.");
         if (widthA != widthB && heightA != heightB) throw new Exception("Matrix dimensions is not square.");
 
         // recursion case
-        if (widthA > 2 && heightA > 2)
-        {
+        if (widthA > 2 && heightA > 2){
             int halfScale = widthA / 2;
 
-            double[,] A00 = MatrixCrop(A,halfScale, halfScale);
+            double[,] A00 = MatrixCrop(A, halfScale, halfScale);
             double[,] A01 = MatrixCrop(A, halfScale, halfScale, 0, halfScale);
             double[,] A10 = MatrixCrop(A, halfScale, halfScale, halfScale, 0);
             double[,] A11 = MatrixCrop(A, halfScale, halfScale, halfScale, halfScale);
@@ -228,18 +212,18 @@ public class Task_3
             double[,] M1 = MatrixMultiply(MatrixAdd(A00, A11), MatrixAdd(B00, B11));
             double[,] M2 = MatrixMultiply(MatrixAdd(A10, A11), B00);
             double[,] M3 = MatrixMultiply(A00, MatrixAdd(B01, MatrixScale(B11, -1)));
-            double[,] M4 = MatrixMultiply(A11, MatrixAdd(B10 ,MatrixScale(B00, -1)));
+            double[,] M4 = MatrixMultiply(A11, MatrixAdd(B10, MatrixScale(B00, -1)));
             double[,] M5 = MatrixMultiply(MatrixAdd(A00, A01), B11);
-            double[,] M6 = MatrixMultiply(MatrixAdd(A10, MatrixScale(A00, -1) ), MatrixAdd(B00, B01));
+            double[,] M6 = MatrixMultiply(MatrixAdd(A10, MatrixScale(A00, -1)), MatrixAdd(B00, B01));
             double[,] M7 = MatrixMultiply(MatrixAdd(A01, MatrixScale(A11, -1)), MatrixAdd(B10, B11));
 
 
-            double[,] M11 = MatrixAdd(M1,MatrixAdd(M4, MatrixAdd(MatrixScale(M5, -1), M7)));
+            double[,] M11 = MatrixAdd(M1, MatrixAdd(M4, MatrixAdd(MatrixScale(M5, -1), M7)));
             double[,] M12 = MatrixAdd(M3, M5);
             double[,] M21 = MatrixAdd(M2, M4);
-            double[,] M22 = MatrixAdd(M1,MatrixAdd(MatrixScale(M2,-1), MatrixAdd(M3, M6)));
+            double[,] M22 = MatrixAdd(M1, MatrixAdd(MatrixScale(M2, -1), MatrixAdd(M3, M6)));
 
-            return MatrixSplice(MatrixSplice(M11,M12,true),MatrixSplice(M21,M22,true),false);
+            return MatrixSplice(MatrixSplice(M11, M12, true), MatrixSplice(M21, M22, true), false);
         }
 
         // base case
@@ -254,36 +238,64 @@ public class Task_3
         return new double[,] { { dM1 + dM4 - dM5 + dM7, dM3 + dM5 }, { dM2 + dM4, dM1 - dM2 + dM3 + dM6 } };
     }
 
-    public static void Main(string[] args)
-    {
+    public static void Main(string[] args){
 
         // TODO add UI to add matrix and select from operations to execute
 
-        double[,] matrixA = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 7, 7, 7 }, };
-        double[,] matrixB = new double[,] { { 5, 1, 2, 3 }, { 5, 4, 5, 6 }, { 5, 7, 8, 9 }, };
+        double[,] matrixA = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 7, 7, 7 }, { 7, 7, 7 } };
+        double[,] matrixB = new double[,] { { 5, 1, 2, 3 }, { 5, 4, 5, 6 }, { 5, 7, 8, 9 } };
 
-        Console.WriteLine($"Width A: {matrixA.GetLength(1)}");
-        Console.WriteLine($"Height A: {matrixA.GetLength(0)}");
+        int AWidth = matrixA.GetLength(1);
+        int AHeight = matrixA.GetLength(0);
+        int BWidth = matrixB.GetLength(1);
+        int BHeight = matrixB.GetLength(0);
+
+        Console.WriteLine($"Width A: {AWidth}");
+        Console.WriteLine($"Height A: {AHeight}");
         PrintMatrix(matrixA);
 
-        Console.WriteLine($"Width B: {matrixB.GetLength(1)}");
-        Console.WriteLine($"Height B: {matrixB.GetLength(0)}");
+        Console.WriteLine($"Width B: {BWidth}");
+        Console.WriteLine($"Height B: {BHeight}");
         PrintMatrix(matrixB);
 
-        matrixA = MatrixPad(matrixA, 4, 4);
-        matrixB = MatrixPad(matrixB, 4, 4);
+        // largest dimension
+        int majorA = (AWidth > AHeight) ? AWidth: AHeight;
+        int majorB = (BWidth > BHeight) ? BWidth : BHeight;
 
-        PrintMatrix(MatrixMultiply(matrixA, matrixB));
+        /*
+        Console.WriteLine($"Major A: {majorA}");
+        Console.WriteLine($"Major B: {majorB}");
+        */
 
+        // largest between A and B
+        int major = (majorA > majorB) ? majorA : majorB;
+
+        // set major to nearest power of 2
+        for (int i = 1; i < int.MaxValue; i *= 2){
+            if (major <= i){
+                major = i;
+                break;
+            }
+        }
+
+        // padd size to largest needed power of 2
+        matrixA = MatrixPad(matrixA, major, major);
+        matrixB = MatrixPad(matrixB, major, major);
+
+        // calculation and cropping to match input matrix sizes
+        double[,] result = MatrixMultiply(matrixA, matrixB); // could be done in one line ( double[,] result = MatrixCrop(MatrixMultiply(matrixA, matrixB), AHeight, BWidth); )
+        result = MatrixCrop(result, AHeight, BWidth);
+
+        PrintMatrix(result);
+
+        // HOLD THE LINE (Console) !!! 
         Console.ReadKey();
     }
 
-    private static void PrintMatrix(double[,] A)
-    {
-        for (int i = 0; i < A.GetLength(0); i++)
-        {
-            for (int j = 0; j < A.GetLength(1); j++)
-            {
+    // prints matrix
+    private static void PrintMatrix(double[,] A){
+        for (int i = 0; i < A.GetLength(0); i++){
+            for (int j = 0; j < A.GetLength(1); j++){
                 Console.Write(A[i, j] + " ");
             }
             Console.WriteLine();
