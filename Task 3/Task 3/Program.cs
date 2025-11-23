@@ -151,9 +151,6 @@ public class Task_3{
         int widthB = B.GetLength(1);
         int heightB = B.GetLength(0);
 
-        // dimensions not matching
-        // if (widthA != B.GetLength(1) || heightA != B.GetLength(0)) throw new Exception("Matrix dimensions not matching.");
-
         double[,] splicedMatrix = (leftToRight) ? new double[heightA, widthA + widthB] : new double[heightA + heightB, widthA];
 
         // addition of B cells to A cells (in situ)
@@ -166,6 +163,20 @@ public class Task_3{
         }
 
         return splicedMatrix;
+    }
+
+    // prints matrix
+    private static void PrintMatrix(double[,] A)
+    {
+        for (int i = 0; i < A.GetLength(0); i++)
+        {
+            for (int j = 0; j < A.GetLength(1); j++)
+            {
+                Console.Write(A[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
     }
 
     /*
@@ -181,16 +192,11 @@ public class Task_3{
                     -> Error/Exception (Dimension mismatch)
     */
     private static double[,] MatrixMultiply(double[,] A, double[,] B){
-
+        // useful dimensions
         int widthA = A.GetLength(1);
         int heightA = A.GetLength(0);
         int widthB = B.GetLength(1);
         int heightB = B.GetLength(0);
-
-        /*
-        Console.WriteLine($"A: {heightA}x{widthA}");
-        Console.WriteLine($"B: {heightB}x{widthB}");
-        */
 
         // dimensions not matching
         if (widthA != heightB) throw new Exception("Matrix dimensions not matching.");
@@ -200,6 +206,7 @@ public class Task_3{
         if (widthA > 2 && heightA > 2){
             int halfScale = widthA / 2;
 
+            // offset to get submatrices
             double[,] A00 = MatrixCrop(A, halfScale, halfScale);
             double[,] A01 = MatrixCrop(A, halfScale, halfScale, 0, halfScale);
             double[,] A10 = MatrixCrop(A, halfScale, halfScale, halfScale, 0);
@@ -209,6 +216,7 @@ public class Task_3{
             double[,] B10 = MatrixCrop(B, halfScale, halfScale, halfScale, 0);
             double[,] B11 = MatrixCrop(B, halfScale, halfScale, halfScale, halfScale);
 
+            // calculate M1 - M7 for submatrices
             double[,] M1 = MatrixMultiply(MatrixAdd(A00, A11), MatrixAdd(B00, B11));
             double[,] M2 = MatrixMultiply(MatrixAdd(A10, A11), B00);
             double[,] M3 = MatrixMultiply(A00, MatrixAdd(B01, MatrixScale(B11, -1)));
@@ -217,7 +225,7 @@ public class Task_3{
             double[,] M6 = MatrixMultiply(MatrixAdd(A10, MatrixScale(A00, -1)), MatrixAdd(B00, B01));
             double[,] M7 = MatrixMultiply(MatrixAdd(A01, MatrixScale(A11, -1)), MatrixAdd(B10, B11));
 
-
+            // reconstruct matrix with M1 - M7
             double[,] M11 = MatrixAdd(M1, MatrixAdd(M4, MatrixAdd(MatrixScale(M5, -1), M7)));
             double[,] M12 = MatrixAdd(M3, M5);
             double[,] M21 = MatrixAdd(M2, M4);
@@ -226,7 +234,7 @@ public class Task_3{
             return MatrixSplice(MatrixSplice(M11, M12, true), MatrixSplice(M21, M22, true), false);
         }
 
-        // base case
+        // base case M1 - M7
         double dM1 = (A[0, 0] + A[1, 1]) * (B[0, 0] + B[1, 1]);
         double dM2 = (A[1, 0] + A[1, 1]) * B[0, 0];
         double dM3 = A[0, 0] * (B[0, 1] - B[1, 1]);
@@ -240,7 +248,7 @@ public class Task_3{
 
     public static void Main(string[] args){
 
-        // TODO add UI to add matrix and select from operations to execute
+        // TODO add UI to add matrix
 
         double[,] matrixA = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 7, 7, 7 }, { 7, 7, 7 } };
         double[,] matrixB = new double[,] { { 5, 1, 2, 3 }, { 5, 4, 5, 6 }, { 5, 7, 8, 9 } };
@@ -261,11 +269,6 @@ public class Task_3{
         // largest dimension
         int majorA = (AWidth > AHeight) ? AWidth: AHeight;
         int majorB = (BWidth > BHeight) ? BWidth : BHeight;
-
-        /*
-        Console.WriteLine($"Major A: {majorA}");
-        Console.WriteLine($"Major B: {majorB}");
-        */
 
         // largest between A and B
         int major = (majorA > majorB) ? majorA : majorB;
@@ -288,18 +291,7 @@ public class Task_3{
 
         PrintMatrix(result);
 
-        // HOLD THE LINE (Console) !!! 
+        // HOLD THE LINE (terminal) !!! 
         Console.ReadKey();
-    }
-
-    // prints matrix
-    private static void PrintMatrix(double[,] A){
-        for (int i = 0; i < A.GetLength(0); i++){
-            for (int j = 0; j < A.GetLength(1); j++){
-                Console.Write(A[i, j] + " ");
-            }
-            Console.WriteLine();
-        }
-        Console.WriteLine();
     }
 }
