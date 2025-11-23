@@ -69,8 +69,6 @@ public class Task_3{
         // already at given size
         if (height == m && width == n) return A;
 
-        Console.WriteLine($"Cropping matrix from {height}x{width} to {m}x{n} with offsets {offsetM},{offsetN}");
-
         double[,] croppedMatrix = new double[m, n];
 
         // conditioned copy of matrix
@@ -250,21 +248,35 @@ public class Task_3{
 
         // TODO add UI to add matrix
 
-        double[,] matrixA = new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }, { 7, 7, 7 }, { 7, 7, 7 } };
-        double[,] matrixB = new double[,] { { 5, 1, 2, 3 }, { 5, 4, 5, 6 }, { 5, 7, 8, 9 } };
+        double[,] matrixA = new double[,] {
+            { 0, 20, 3, 1, 8, 55 },
+            { 1, 8, 55, 3, 1, 8 },
+            { 17, 20, 3, 0, 7, 21 },
+            { 4, 5, 6, 4, 5, 6 }
+        };
+        double[,] matrixB = new double[,] { 
+            { -1, 15, 2, 3 },
+            { 50, 4, -8, 6 },
+            { 5, 4, 5, 63 },
+            { 1, -40, 5, 6 },
+            { 0, 4, 5, 13 },
+            { 5, 7, 0, 9 } 
+        };
 
         int AWidth = matrixA.GetLength(1);
         int AHeight = matrixA.GetLength(0);
         int BWidth = matrixB.GetLength(1);
         int BHeight = matrixB.GetLength(0);
 
-        Console.WriteLine($"Width A: {AWidth}");
-        Console.WriteLine($"Height A: {AHeight}");
+        Console.WriteLine($"A: Width:{AWidth} Height:{AHeight}");
+        Console.WriteLine();
         PrintMatrix(matrixA);
 
-        Console.WriteLine($"Width B: {BWidth}");
-        Console.WriteLine($"Height B: {BHeight}");
+        Console.WriteLine($"B: Width:{BWidth} Height:{BHeight}");
+        Console.WriteLine();
         PrintMatrix(matrixB);
+
+        if (AWidth != BHeight) throw new Exception("Matrix dimensions not matching for multiplication.");
 
         // largest dimension
         int majorA = (AWidth > AHeight) ? AWidth: AHeight;
@@ -289,6 +301,7 @@ public class Task_3{
         double[,] result = MatrixMultiply(matrixA, matrixB); // could be done in one line ( double[,] result = MatrixCrop(MatrixMultiply(matrixA, matrixB), AHeight, BWidth); )
         result = MatrixCrop(result, AHeight, BWidth);
 
+        Console.WriteLine("Result of AxB: \n");
         PrintMatrix(result);
 
         // HOLD THE LINE (terminal) !!! 
