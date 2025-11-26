@@ -5,20 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 public class Task_3{
-    /*
-    double[,] MatrixPad(double[,] A, int m, int n)
-        Input:
-            two two-dimensional arrays of real numbers
-        Output:
-            a two-dimensional array, padded with zeros to fit size m by n
-        Examples:
-            MatrixPad({{1, 2, 3},{4, 5, 6}}, 4, 4)
-                    -> {{1, 2, 3, 0}, {4, 5, 6, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}
-            MatrixPad({{1, 2, 3},{4, 5, 6}}, 4, 3)
-                    -> {{1, 2, 3}, {4, 5, 6}, {0, 0, 0}, {0, 0, 0}}
-            MatrixPad({{1, 2, 3},{4, 5, 6}}, 2, 2)
-                    -> Error/Exception (A destination size is smaller than input size)
-    */
     private static double[,] MatrixPad(double[,] A, int m, int n){
 
         int width = A.GetLength(1);
@@ -43,20 +29,35 @@ public class Task_3{
         return paddedMatrix;
     }
 
-    /*
-    double[,] MatrixCrop(double[,] A, int m, int n)
-        Input:
-            two two-dimensional arrays of real numbers
-        Output:
-            a two-dimensional array, cropped to size m times n
-        Examples:
-            MatrixCrop({{1, 2, 3, 0}, {4, 5, 6, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, 2, 3)
-                    -> {{1, 2, 3},{4, 5, 6}}
-            MatrixCrop({{1, 2, 3},{4, 5, 6}}, 2, 2)
-                    -> {{1, 2}, {4, 5}}
-            MatrixCrop({{1, 2, 3},{4, 5, 6}}, 3, 3)
-                    -> Error/Exception (A destination size is larger than input size)
-    */
+    private static List<double[,]> MatrixAutoPad(double[,] A, double[,] B){
+        List<double[,]> paddedMatrices = new List<double[,]>();
+        int AWidth = A.GetLength(1);
+        int AHeight = A.GetLength(0);
+        int BWidth = B.GetLength(1);
+        int BHeight = B.GetLength(0);
+
+        // largest dimension
+        int majorA = (AWidth > AHeight) ? AWidth : AHeight;
+        int majorB = (BWidth > BHeight) ? BWidth : BHeight;
+
+        // largest between A and B
+        int major = (majorA > majorB) ? majorA : majorB;
+
+        // set major to nearest power of 2
+        for (int i = 1; i < int.MaxValue; i *= 2){
+            if (major <= i){
+                major = i;
+                break;
+            }
+        }
+
+        // padd size to largest needed power of 2
+        paddedMatrices.Add(MatrixPad(A, major, major));
+        paddedMatrices.Add(MatrixPad(B, major, major));
+
+        return paddedMatrices;
+    }
+
     private static double[,] MatrixCrop(double[,] A, int m, int n, int offsetM = 0, int offsetN = 0){
         int width = A.GetLength(1);
         int height = A.GetLength(0);
@@ -81,18 +82,6 @@ public class Task_3{
         return croppedMatrix;
     }
 
-    /*
-    double[,] MatrixScale(double[,] A, double x)
-        Input:
-            two two-dimensional arrays of real numbers
-        Output:
-            a two-dimensional array - input matrix, but with each element multiplied by x
-        Examples:
-            MatrixScale({{1, 2, 3}, {4, 5, 6}}, -1)
-                    -> {{-1, -2, -3}, {-4, -5, -6}}
-            MatrixScale({{1, 2, 3}, {4, 5, 6}}, 2)
-                    -> {{2, 4, 6}, {8, 10, 12}}
-    */
     private static double[,] MatrixScale(double[,] A, double x){
         int width = A.GetLength(1);
         int height = A.GetLength(0);
@@ -112,18 +101,6 @@ public class Task_3{
         return scaledMatrix;
     }
 
-    /*
-    double[,] MatrixAdd(double[,] A, double[,] B)
-        Input:
-            two two-dimensional arrays of real numbers
-        Output:
-            a two-dimensional array - a sum of input matrices
-        Examples:
-            MatrixAdd({{1, 2, 3},{4, 5, 6}}, {{7, 8, 9}, {10, 11, 12}})
-                    -> {{8, 10, 12}, {14, 16, 18}}
-            MatrixAdd({{1, 2, 3},{4, 5, 6}}, {{7, 8}, {9, 10}, {11, 12}})
-                    -> Error/Exception (Dimension mismatch)
-    */
     private static double[,] MatrixAdd(double[,] A, double[,] B){
         int widthA = A.GetLength(1);
         int heightA = A.GetLength(0);
@@ -164,12 +141,9 @@ public class Task_3{
     }
 
     // prints matrix
-    private static void PrintMatrix(double[,] A)
-    {
-        for (int i = 0; i < A.GetLength(0); i++)
-        {
-            for (int j = 0; j < A.GetLength(1); j++)
-            {
+    private static void PrintMatrix(double[,] A){
+        for (int i = 0; i < A.GetLength(0); i++){
+            for (int j = 0; j < A.GetLength(1); j++){
                 Console.Write(A[i, j] + " ");
             }
             Console.WriteLine();
@@ -177,18 +151,6 @@ public class Task_3{
         Console.WriteLine();
     }
 
-    /*
-    double[,] MatrixMultiply(double[,] A, double[,] B)
-        Input:
-            two two-dimensional arrays of real numbers
-        Output:
-            a two-dimensional array - a product of input matrices
-        Examples:
-            MatrixMultiply({{1, 2, 3},{4, 5, 6}}, {{7, 8}, {9, 10}, {11, 12}})
-                    -> {{58, 64}, {139, 154}}
-            MatrixMultiply({{1, 2, 3},{4, 5, 6}}, {{7, 8, 9}, {10, 11, 12}})
-                    -> Error/Exception (Dimension mismatch)
-    */
     private static double[,] MatrixMultiply(double[,] A, double[,] B){
         // useful dimensions
         int widthA = A.GetLength(1);
@@ -268,34 +230,17 @@ public class Task_3{
         int BWidth = matrixB.GetLength(1);
         int BHeight = matrixB.GetLength(0);
 
-        Console.WriteLine($"A: Width:{AWidth} Height:{AHeight}");
-        Console.WriteLine();
+        Console.WriteLine($"A: Width:{AWidth} Height:{AHeight}\n");
         PrintMatrix(matrixA);
 
-        Console.WriteLine($"B: Width:{BWidth} Height:{BHeight}");
-        Console.WriteLine();
+        Console.WriteLine($"B: Width:{BWidth} Height:{BHeight}\n");
         PrintMatrix(matrixB);
 
         if (AWidth != BHeight) throw new Exception("Matrix dimensions not matching for multiplication.");
 
-        // largest dimension
-        int majorA = (AWidth > AHeight) ? AWidth: AHeight;
-        int majorB = (BWidth > BHeight) ? BWidth : BHeight;
-
-        // largest between A and B
-        int major = (majorA > majorB) ? majorA : majorB;
-
-        // set major to nearest power of 2
-        for (int i = 1; i < int.MaxValue; i *= 2){
-            if (major <= i){
-                major = i;
-                break;
-            }
-        }
-
-        // padd size to largest needed power of 2
-        matrixA = MatrixPad(matrixA, major, major);
-        matrixB = MatrixPad(matrixB, major, major);
+        List<double[,]> matrices = MatrixAutoPad(matrixA, matrixB);
+        matrixA = matrices[0];
+        matrixB = matrices[1];
 
         // calculation and cropping to match input matrix sizes
         double[,] result = MatrixMultiply(matrixA, matrixB); // could be done in one line ( double[,] result = MatrixCrop(MatrixMultiply(matrixA, matrixB), AHeight, BWidth); )
